@@ -20,8 +20,8 @@ public class Spolek
     public DateTime? CreatedAt { get; set; }
     public string? Guidelines { get; set; }
     public DateTime? GuidelinesUpdatedAt { get; set; }
-    public int? CharirmanId { get; set; }
-    [ForeignKey(nameof(CharirmanId))]
+    public int? ChairmanId { get; set; }
+    [ForeignKey(nameof(ChairmanId))]
     public User? Chairman { get; set; }
 
     public ICollection<Exhibition> Exhibitions { get; set; } = new List<Exhibition>();
