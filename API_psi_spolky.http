@@ -1,0 +1,6 @@
+@API_psi_spolky_HostAddress = http://localhost:5110
+
+GET {{API_psi_spolky_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
