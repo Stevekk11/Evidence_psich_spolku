@@ -1,6 +1,25 @@
 @API_psi_spolky_HostAddress = http://localhost:5110
 
-POST {{API_psi_spolky_HostAddress}}/login/
+### Register a new user
+POST {{API_psi_spolky_HostAddress}}/register
+Content-Type: application/json
 Accept: application/json
 
-###
+{
+  "email": "cykablat@gmail.com",
+  "password": "Cyka blyat666!!",
+  "name": "Stevek",
+  "surname": "11",
+  "role": "Admin",
+  "phoneNumber": "123456789"
+}
+
+### Login with the user's credentials
+POST {{API_psi_spolky_HostAddress}}/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "cykablat@gmail.com",
+  "password": "Cyka blyat666!!"
+}

@@ -1,21 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace API_psi_spolky.DatabaseModels;
 
-public class User
+public class User : IdentityUser
 {
-    [Key]
-    public int Id { get; set; }
-    [Required]
+    [Required, MaxLength(100)]
     public string Name { get; set; } = string.Empty;
-    [Required, EmailAddress]
-    public string Email { get; set; } = string.Empty;
-    [Required]
-    public string Password { get; set; } = string.Empty;
-    [Required]
+    [Required, MaxLength(100)]
     public string Surname { get; set; } = string.Empty;
     [Required]
-    public string Role { get; set; } = "READ_ONLY";
+    public Role Role { get; set; } = Role.Public;
     [Required]
     public bool IsActive { get; set; } = true;
 }

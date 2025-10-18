@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace API_psi_spolky.DatabaseModels;
 
-public class SpolkyDbContext : DbContext
+public class SpolkyDbContext : IdentityDbContext<User>
 {
     public SpolkyDbContext(DbContextOptions<SpolkyDbContext> options) : base(options) { }
 

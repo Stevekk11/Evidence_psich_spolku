@@ -21,7 +21,7 @@ public class Exhibition
     public string? Description { get; set; }
 
     [ForeignKey(nameof(CreatedBy))]
-    public int? CreatedById { get; set; }
+    public string? CreatedById { get; set; }
     public User? CreatedBy { get; set; }
 
     public ICollection<ExhibitionResult> ExhibitionResults { get; set; } = new List<ExhibitionResult>();

@@ -20,7 +20,7 @@ public class Spolek
     public DateTime? CreatedAt { get; set; }
     public string? Guidelines { get; set; }
     public DateTime? GuidelinesUpdatedAt { get; set; }
-    public int? ChairmanId { get; set; }
+    public string? ChairmanId { get; set; }
     [ForeignKey(nameof(ChairmanId))]
     public User? Chairman { get; set; }
 

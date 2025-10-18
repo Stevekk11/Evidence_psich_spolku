@@ -21,6 +21,6 @@ public class ExhibitionResult
     public string? Score { get; set; }
 
     [ForeignKey(nameof(CreatedBy))]
-    public int? CreatedById { get; set; }
+    public string? CreatedById { get; set; }
     public User? CreatedBy { get; set; }
 }

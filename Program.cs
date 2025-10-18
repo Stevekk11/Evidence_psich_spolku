@@ -1,4 +1,7 @@
+using System.Text.Json.Serialization;
 using API_psi_spolky.DatabaseModels;
+using API_psi_spolky.Endpoints;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Debugging;
@@ -8,7 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Evidence psích spolků a chovatelů", Version = "v1" });
+});
 
 SelfLog.Enable(Console.Error);
 Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo
@@ -17,8 +24,19 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo
 // C#
 builder.Services.AddDbContext<SpolkyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<SpolkyDbContext>();
 // Configure the HTTP request pipeline.
 builder.Host.UseSerilog();
+builder.Services.AddAuthorization();
+// C#
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
@@ -26,20 +44,27 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
+app.MapGet("/", () =>
+{
+    return "Nothing here! Go to /login or /register to start!";
+}).WithDescription("The root page - nothing here!").WithName("root");
 
-app.MapGet("/", () => "Nothing here! Go to /login or /register to start!");
 app.MapGet("/favicon.ico", async context =>
 {
     context.Response.ContentType = "image/x-icon";
     await context.Response.SendFileAsync("wwwroot/favicon.ico");
-});
+}).WithDescription("Returns the favicon").WithName("favicon");
 
-
+app.MapLoginEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.Run();
