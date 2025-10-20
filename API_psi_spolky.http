@@ -6,7 +6,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "cykablat@gmail.com",
+  "email": "cykablyat@gmail.com",
   "password": "Cyka blyat666!!",
   "name": "Stevek",
   "surname": "11",
@@ -20,6 +20,12 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "cykablat@gmail.com",
+  "userName": "Stevek",
   "password": "Cyka blyat666!!"
 }
+### Get this logged in user user
+GET {{API_psi_spolky_HostAddress}}/me
+###
+POST   {{API_psi_spolky_HostAddress}}/logout
+Content-Type: application/json
+Accept: application/json

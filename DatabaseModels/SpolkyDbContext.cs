@@ -9,7 +9,6 @@ public class SpolkyDbContext : IdentityDbContext<User>
     public SpolkyDbContext(DbContextOptions<SpolkyDbContext> options) : base(options) { }
 
     public DbSet<Spolek> Spolky { get; set; }
-    public DbSet<User> Users { get; set; }
     public DbSet<Exhibition> Exhibitions { get; set; }
     public DbSet<ExhibitionResult> ExhibitionResults { get; set; }
     public DbSet<Dog> Dogs { get; set; }

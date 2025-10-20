@@ -7,13 +7,13 @@ namespace API_psi_spolky.Endpoints;
 /// Represents the data transfer object for registering a new user.
 /// Contains essential user information required for account creation.
 /// </summary>
-public record RegisterUserDto(string Email, string Password, string Name, string Surname, Role Role, string PhoneNumber = "");
+public record RegisterUserDto(string Email, string Password, string Name, string Surname, Role Role = Role.Public, string PhoneNumber = "");
 
 /// <summary>
 /// Represents the data transfer object for logging in a user.
 /// Contains user credentials required for authentication.
 /// </summary>
-public record LoginUserDto(string Email, string Password);
+public record LoginUserDto(string UserName, string Password);
 
 /// <summary>
 /// Provides endpoint mappings for user authentication functionality,
@@ -31,9 +31,8 @@ public static class LoginEndpoints
         {
             var user = new User
             {
-                UserName = registration.Email,
+                UserName = registration.Name,
                 Email = registration.Email,
-                Name = registration.Name,
                 Surname = registration.Surname,
                 Role = registration.Role,
                 PhoneNumber = registration.PhoneNumber
@@ -58,18 +57,24 @@ public static class LoginEndpoints
                 return Results.BadRequest(addToRole.Errors);
 
             return Results.Ok("User registered successfully.");
-        }).WithName("Register").WithDescription("Registers a new user.");
+        }).WithName("Register").WithDescription("Registers a new user.").WithDisplayName("Register");
 
         app.MapPost("/login", async (SignInManager<User> signInManager, LoginUserDto login) =>
         {
-            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent: false, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(login.UserName, login.Password, isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)
             {
-                return Results.Ok("Login successful. Welcome, " + login.Email + "");
+                return Results.Ok("Login successful. Welcome, " + login.UserName + "");
             }
 
             return Results.Unauthorized();
         }).WithName("Login").WithDescription("Logs in an existing user.");
+
+        app.MapPost("/logout", async (SignInManager<User> signInManager) =>
+        {
+            await signInManager.SignOutAsync();
+            return Results.NoContent();
+        }).RequireAuthorization().WithName("Logout").WithDescription("Logs out the current user.").WithDisplayName("Logout");
     }
 }

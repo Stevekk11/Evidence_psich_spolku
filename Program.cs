@@ -1,6 +1,9 @@
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using API_psi_spolky.DatabaseModels;
 using API_psi_spolky.Endpoints;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -26,6 +29,11 @@ builder.Services.AddDbContext<SpolkyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<SpolkyDbContext>();
+builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
+{
+    options.LoginPath = "/";           // redirect target when unauthenticated
+    options.AccessDeniedPath = "/";    // optional: also send access denied to /login
+});
 // Configure the HTTP request pipeline.
 builder.Host.UseSerilog();
 builder.Services.AddAuthorization();
@@ -47,13 +55,24 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/", () =>
 {
     return "Nothing here! Go to /login or /register to start!";
-}).WithDescription("The root page - nothing here!").WithName("root");
+}).WithDescription("The root page - nothing here!").WithName("root").WithDisplayName("Root");
 
 app.MapGet("/favicon.ico", async context =>
 {
     context.Response.ContentType = "image/x-icon";
     await context.Response.SendFileAsync("wwwroot/favicon.ico");
-}).WithDescription("Returns the favicon").WithName("favicon");
+}).WithDescription("Returns the favicon").WithName("favicon").WithDisplayName("Favicon");
+
+app.MapGet("/me", (ClaimsPrincipal user) =>
+{
+    var email = user.FindFirstValue(ClaimTypes.Email);
+    var name = user.FindFirstValue(ClaimTypes.Name);
+    var surname = user.FindFirstValue(ClaimTypes.Surname);
+    return Results.Ok(new
+    {
+        email, name, surname
+    });
+}).RequireAuthorization().WithName("Me").WithDescription("Returns the user's email, name and surname").WithDisplayName("Me");
 
 app.MapLoginEndpoints();
 if (app.Environment.IsDevelopment())
