@@ -6,8 +6,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "cykablyat@gmail.com",
-  "password": "Cyka blyat666!!",
+  "email": "stevek@gmail.com",
+  "password": "Stevek123+-",
   "name": "Stevek",
   "surname": "11",
   "role": "Admin",
@@ -21,7 +21,7 @@ Accept: application/json
 
 {
   "userName": "Stevek",
-  "password": "Cyka blyat666!!"
+  "password": "Stevek123+-"
 }
 ### Get this logged in user user
 GET {{API_psi_spolky_HostAddress}}/me
@@ -29,3 +29,69 @@ GET {{API_psi_spolky_HostAddress}}/me
 POST   {{API_psi_spolky_HostAddress}}/logout
 Content-Type: application/json
 Accept: application/json
+###
+GET {{API_psi_spolky_HostAddress}}/api/exhibitions
+###
+GET {{API_psi_spolky_HostAddress}}/api/exhibitions/2/results
+###
+GET {{API_psi_spolky_HostAddress}}/api/exhibitions/2
+###
+GET {{API_psi_spolky_HostAddress}}/api/clubs
+###
+GET {{API_psi_spolky_HostAddress}}/api/clubs/1/statutes
+Accept: application/json
+###
+POST {{API_psi_spolky_HostAddress}}/api/exhibitions
+Content-Type: application/json
+Accept: application/json
+
+{
+"name": "Prague Dog Show 2025",
+"date": "2025-11-20T09:00:00Z",
+"place": "Praha - Výstaviště",
+"spolekId": 1,
+"description": "Autumn show"
+}
+###
+POST {{API_psi_spolky_HostAddress}}/api/exhibitions/2/results
+Content-Type: application/json
+Accept: application/json
+
+
+{
+  "dogId": 1,
+  "location": "Ring B",
+  "description": "Excellent movement and posture",
+  "score": "V1 CAC"
+}
+### create dog
+POST {{API_psi_spolky_HostAddress}}/api/dogs/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Argo",
+  "breed": "Border Collie",
+  "gender": "Male",
+  "dateOfBirth": "2021-05-01",
+  "ownersName": "Stevek 11",
+  "ownersPhone": "+420 111 222 333"
+}
+### Create club
+POST {{API_psi_spolky_HostAddress}}/api/clubs/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Klub chovatelů pražských čoklů",
+  "ico": "12345678",
+  "address": "Blbova, Praha 21",
+  "email": "info@kchpk.cz",
+  "phone": "+420123456789",
+  "guidelines": "Jsme kokoti",
+  "guidelinesUpdatedAt": "2025-10-01T12:00:00Z"
+}
+
+###
+GET {{API_psi_spolky_HostAddress}}/api/clubs/1/export?format=csv
+Accept: text/csv
