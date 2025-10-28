@@ -47,7 +47,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
 {
     options.LoginPath = "/"; // redirect target when unauthenticated
-    options.AccessDeniedPath = "/";
+    options.AccessDeniedPath = "/denied";
 });
 // Configure the HTTP request pipeline.
 builder.Host.UseSerilog();
@@ -69,7 +69,7 @@ using (var scope = app.Services.CreateScope())
 
 app.MapGet("/", () => { return "Nothing here! Go to /login or /register to start!"; })
     .WithDescription("The root page - nothing here!").WithName("root").WithDisplayName("Root");
-
+app.MapGet("/denied", () => { return "Access denied!"; });
 app.MapGet("/favicon.ico", async context =>
 {
     context.Response.ContentType = "image/x-icon";

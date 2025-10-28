@@ -1,62 +1,67 @@
-@API_psi_spolky_HostAddress = http://localhost:5110
+@host = http://localhost:5110
+@json = application/json
 
 ### Register a new user
-POST {{API_psi_spolky_HostAddress}}/register
-Content-Type: application/json
-Accept: application/json
+POST {{host}}/register
+Content-Type: {{json}}
+Accept: {{json}}
 
 {
-  "email": "stevek@gmail.com",
-  "password": "Stevek123+-",
-  "name": "Stevek",
-  "surname": "11",
-  "role": "Admin",
-  "phoneNumber": "123456789"
+  "email": "user@example.com",
+  "password": "SecurePass123+-",
+  "name": "Jane",
+  "surname": "Doe",
+  "role": "ReadOnly",
+  "phoneNumber": "+420 777 888 999"
 }
 
-### Login with the user's credentials
-POST {{API_psi_spolky_HostAddress}}/login
-Content-Type: application/json
-Accept: application/json
+### Login
+POST {{host}}/login
+Content-Type: {{json}}
+Accept: {{json}}
 
 {
-  "userName": "Stevek",
-  "password": "Stevek123+-"
+  "userName": "Jane",
+  "password": "SecurePass123+-"
 }
-### Get this logged in user user
-GET {{API_psi_spolky_HostAddress}}/me
-###
-POST   {{API_psi_spolky_HostAddress}}/logout
-Content-Type: application/json
-Accept: application/json
-###
-GET {{API_psi_spolky_HostAddress}}/api/exhibitions
-###
-GET {{API_psi_spolky_HostAddress}}/api/exhibitions/2/results
-###
-GET {{API_psi_spolky_HostAddress}}/api/exhibitions/2
-###
-GET {{API_psi_spolky_HostAddress}}/api/clubs
-###
-GET {{API_psi_spolky_HostAddress}}/api/clubs/1/statutes
-Accept: application/json
-###
-POST {{API_psi_spolky_HostAddress}}/api/exhibitions
-Content-Type: application/json
-Accept: application/json
+
+### Get current user
+GET {{host}}/me
+Accept: {{json}}
+
+### Logout
+POST {{host}}/logout
+Accept: {{json}}
+
+### List exhibitions
+GET {{host}}/api/exhibitions
+Accept: {{json}}
+
+### Get exhibition by id
+GET {{host}}/api/exhibitions/2
+Accept: {{json}}
+
+### Create exhibition
+POST {{host}}/api/exhibitions
+Content-Type: {{json}}
+Accept: {{json}}
 
 {
-"name": "Prague Dog Show 2025",
-"date": "2025-11-20T09:00:00Z",
-"place": "Praha - Výstaviště",
-"spolekId": 1,
-"description": "Autumn show"
+  "name": "Prague Dog Show 2025",
+  "date": "2025-11-20T09:00:00Z",
+  "place": "Praha - Výstaviště",
+  "spolekId": 1,
+  "description": "Autumn show"
 }
-###
-POST {{API_psi_spolky_HostAddress}}/api/exhibitions/2/results
-Content-Type: application/json
-Accept: application/json
 
+### List exhibition results
+GET {{host}}/api/exhibitions/2/results
+Accept: {{json}}
+
+### Create exhibition result
+POST {{host}}/api/exhibitions/2/results
+Content-Type: {{json}}
+Accept: {{json}}
 
 {
   "dogId": 1,
@@ -64,34 +69,45 @@ Accept: application/json
   "description": "Excellent movement and posture",
   "score": "V1 CAC"
 }
-### create dog
-POST {{API_psi_spolky_HostAddress}}/api/dogs/
-Content-Type: application/json
-Accept: application/json
+
+### Create dog
+POST {{host}}/api/dogs
+Content-Type: {{json}}
+Accept: {{json}}
 
 {
   "name": "Argo",
   "breed": "Border Collie",
   "gender": "Male",
   "dateOfBirth": "2021-05-01",
-  "ownersName": "Stevek 11",
+  "ownersName": "Jane Doe",
   "ownersPhone": "+420 111 222 333"
 }
+
+### List clubs
+GET {{host}}/api/clubs
+Accept: {{json}}
+
+### Get club statutes
+GET {{host}}/api/clubs/1/statutes
+Accept: {{json}}
+
 ### Create club
-POST {{API_psi_spolky_HostAddress}}/api/clubs/
-Content-Type: application/json
-Accept: application/json
+POST {{host}}/api/clubs
+Content-Type: {{json}}
+Accept: {{json}}
 
 {
-  "name": "Klub chovatelů pražských čoklů",
+  "name": "Klub chovatelů psů",
   "ico": "12345678",
-  "address": "Blbova, Praha 21",
-  "email": "info@kchpk.cz",
-  "phone": "+420123456789",
-  "guidelines": "Jsme kokoti",
+  "address": "Ulice 1, Praha",
+  "email": "info@kchp.cz",
+  "phone": "+420 123 456 789",
+  "guidelines": "Aktuální směrnice klubu",
   "guidelinesUpdatedAt": "2025-10-01T12:00:00Z"
 }
 
-###
-GET {{API_psi_spolky_HostAddress}}/api/clubs/1/export?format=csv
+### Export club data (CSV)
+GET {{host}}/api/clubs/1/export?format=csv
 Accept: text/csv
+

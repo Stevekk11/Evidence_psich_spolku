@@ -5,6 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API_psi_spolky.Endpoints;
 
+/// <summary>
+/// Provides endpoint mappings for managing exhibitions within the application.
+/// </summary>
+/// <remarks>
+/// This class includes endpoints for creating exhibitions, retrieving exhibition details, adding results to exhibitions,
+/// and retrieving results for specific exhibitions. These endpoints include built-in authorization policies
+/// and are intended for roles such as Admin, Chairman, Public, and ReadOnly depending on the API functionality.
+/// </remarks>
 public static class ExhibitionEndpoints
 {
     public static void MapExhibitionEndpoints(this WebApplication app)
@@ -42,7 +50,7 @@ public static class ExhibitionEndpoints
                 ctx.Set<Exhibition>().Add(entity);
                 await ctx.SaveChangesAsync();
 
-                // Return a safe projection (avoid returning tracked entity with navs)
+                
                 var response = new
                 {
                     entity.Id,
@@ -58,7 +66,7 @@ public static class ExhibitionEndpoints
             .WithName("CreateExhibition")
             .WithDescription("Vytvoří novou výstavu.")
             .WithSummary("Create Exhibition")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman"));
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<Exhibition>().Produces(401);
 
         app.MapGet("/api/exhibitions", async (SpolkyDbContext ctx) =>
             {
@@ -112,7 +120,7 @@ public static class ExhibitionEndpoints
                 if (!exhibitionExists)
                     return Results.NotFound("Výstava nebyla nalezena.");
 
-                // Ověření, že pes existuje (volitelné, ale doporučeno)
+                // Ověření, že pes existuje 
                 var dogExists = await ctx.Set<Dog>().AnyAsync(d => d.Id == dto.DogId);
                 if (!dogExists)
                     return Results.BadRequest("Zvolený pes neexistuje.");
