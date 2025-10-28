@@ -107,7 +107,8 @@ public static class ClubEndpoints
                     Phone = dto.Phone,
                     CreatedAt = DateTime.UtcNow,
                     ChairmanId = user.FindFirstValue(ClaimTypes.NameIdentifier)
-                                 ?? user.FindFirstValue(ClaimTypes.Name)
+                                 ?? user.FindFirstValue(ClaimTypes.Name),
+                    Guidelines = dto.Guidelines
                 };
 
                 ctx.Set<Spolek>().Add(newClub);
@@ -137,7 +138,7 @@ public static class ClubEndpoints
                     var club = await ctx.Set<Spolek>().AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
                     if (club is null) return Results.NotFound("Spolek nebyl nalezen.");
 
-                    // Serialize old/new states (simple approach; replace with your serializer if needed)
+                    // Serialize old/new states
                     var originalJson = System.Text.Json.JsonSerializer.Serialize(new
                     {
                         club.Name,
@@ -154,12 +155,14 @@ public static class ClubEndpoints
                         proposed.Ico,
                         proposed.Address,
                         proposed.Email,
-                        proposed.Phone
+                        proposed.Phone,
+                        proposed.Guidelines
                     });
 
                     var log = new AuditLog
                     {
-                        UserId = user.FindFirstValue(ClaimTypes.Name),
+                        UserId = user.FindFirstValue(ClaimTypes.NameIdentifier)
+                                 ?? user.FindFirstValue(ClaimTypes.Name),
                         SpolekId = id,
                         Action = "ClubChangeRequest",
                         ChangedAt = DateTime.UtcNow,
@@ -173,7 +176,7 @@ public static class ClubEndpoints
                     return Results.Created($"/api/audit/statutes?clubId={id}", new { log.Id });
                 })
             .WithName("CreateClubChangeRequest")
-            .WithDescription("Vytvoří požadavek na změnu údajů spolku (audit log).")
+            .WithDescription("Vytvoří požadavek na změnu údajů spolku do audit logu.")
             .WithSummary("Create club change request")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman"));
 

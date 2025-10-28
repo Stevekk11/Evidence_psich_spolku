@@ -112,7 +112,7 @@ public static class ExhibitionEndpoints
             .WithName("GetExhibitionById")
             .WithDescription("Vrátí detail výstavy dle ID")
             .WithSummary("Get Exhibition By ID")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly"));
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly"));
         app.MapPost("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id, ExhibitionResultDto dto) =>
             {
                 // Ověření, že výstava existuje

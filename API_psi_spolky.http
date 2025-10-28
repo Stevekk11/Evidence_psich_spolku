@@ -111,3 +111,22 @@ Accept: {{json}}
 GET {{host}}/api/clubs/1/export?format=csv
 Accept: text/csv
 
+### Submit club change request
+POST {{host}}/api/clubs/1/change-request
+Content-Type: {{json}}
+Accept: {{json}}
+
+{
+  "name": "Updated Club Name",
+  "ico": "87654321",
+  "address": "New Street 123, Prague",
+  "email": "new@kchp.cz",
+  "phone": "+420 987 654 321",
+  "guidelines": "Updated club guidelines",
+  "reason": "Updating contact information and guidelines"
+}
+
+### Get club change requests
+GET {{host}}/api/clubs/1/change-request
+Accept: {{json}}
+
