@@ -113,7 +113,7 @@ public static class ExhibitionEndpoints
             .WithDescription("Vrátí detail výstavy dle ID")
             .WithSummary("Get Exhibition By ID")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<Exhibition>().Produces(401);
-        app.MapPost("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id, ExhibitionResultDto dto) =>
+        app.MapPost("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id, ExhibitionResultDto dto, ClaimsPrincipal user) =>
             {
                 // Ověření, že výstava existuje
                 var exhibitionExists = await ctx.Set<Exhibition>().AnyAsync(e => e.Id == id);
@@ -132,7 +132,9 @@ public static class ExhibitionEndpoints
                     DogId = dto.DogId,
                     Location = dto.Location,
                     Description = dto.Description,
-                    Score = dto.Score
+                    Score = dto.Score,
+                    CreatedById = user.FindFirstValue(ClaimTypes.NameIdentifier)
+                                  ?? user.FindFirstValue(ClaimTypes.Name)
                 };
 
                 ctx.Set<ExhibitionResult>().Add(result);
