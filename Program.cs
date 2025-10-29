@@ -68,8 +68,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGet("/", () => { return "Nothing here! Go to /login or /register to start!"; })
-    .WithDescription("The root page - nothing here!").WithName("root").WithDisplayName("Root");
-app.MapGet("/denied", () => { return "Access denied!"; });
+    .WithDescription("The root page - nothing here!").WithName("root").WithSummary("Root");
+app.MapGet("/denied", Results.Unauthorized);
 app.MapGet("/favicon.ico", async context =>
 {
     context.Response.ContentType = "image/x-icon";

@@ -4,6 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API_psi_spolky.DatabaseModels;
 
+/// <summary>
+/// Provides a database context for the application, managing entities and their relationships.
+/// </summary>
+/// <remarks>
+/// Inherits from IdentityDbContext to include support for Identity features. Designed to manage application-specific entities such as Users, Spolky, Exhibitions, Dogs, AuditLogs, and related relationships.
+/// </remarks>
 public class SpolkyDbContext : IdentityDbContext<User>
 {
     public SpolkyDbContext(DbContextOptions<SpolkyDbContext> options) : base(options) { }

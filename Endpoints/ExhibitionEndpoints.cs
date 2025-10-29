@@ -87,7 +87,7 @@ public static class ExhibitionEndpoints
             }).WithName("GetExhibitions")
             .WithDescription("Vrátí seznam výstav.")
             .WithSummary("Get all exhibitions")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly"));
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly")).Produces<List<Exhibition>>().Produces(401);
 
         app.MapGet("/api/exhibitions/{id:int}", async (SpolkyDbContext ctx, int id) =>
             {
@@ -112,7 +112,7 @@ public static class ExhibitionEndpoints
             .WithName("GetExhibitionById")
             .WithDescription("Vrátí detail výstavy dle ID")
             .WithSummary("Get Exhibition By ID")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly"));
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<Exhibition>().Produces(401);
         app.MapPost("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id, ExhibitionResultDto dto) =>
             {
                 // Ověření, že výstava existuje
@@ -150,7 +150,7 @@ public static class ExhibitionEndpoints
             })
             .WithName("AddExhibitionResult")
             .WithDescription("Přidá výsledek ke konkrétní výstavě.").WithSummary("Add result to an exhibition.")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman"));
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<ExhibitionResult>().Produces(401);
         app.MapGet("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id) =>
             {
                 var exists = await ctx.Set<Exhibition>().AnyAsync(e => e.Id == id);
@@ -175,6 +175,6 @@ public static class ExhibitionEndpoints
             }).WithName("GetExhibitionResults")
             .WithDescription("Vrátí seznam výsledků pro konkrétní výstavu.")
             .WithSummary("Get results for an exhibition")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly"));
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly")).Produces<List<ExhibitionResult>>().Produces(401);
     }
 }
