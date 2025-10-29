@@ -1,7 +1,7 @@
 ﻿# API pro psí spolky
 
 Toto API poskytuje endpointy pro správu psích spolků, výstav a souvisejících funkcionalit.
-
+#### Příklady requestů v souboru API_psi_spolky.http !
 ## Funkce
 
 - Správa spolků (vytváření, úpravy, export)

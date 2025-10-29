@@ -83,6 +83,24 @@ public static class Endpoints
                     var bytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
                     return Results.File(bytes, "text/csv", fileDownloadName: $"club_{id}.csv");
                 }
+                else if (fmt == "pdf")
+                {
+                    var clubData = new ClubExportData(
+                        club.Id,
+                        club.Name,
+                        club.Ico,
+                        club.Address,
+                        club.Email,
+                        club.Phone,
+                        club.CreatedAt,
+                        club.Guidelines,
+                        club.GuidelinesUpdatedAt,
+                        club.ChairmanUserName
+                    );
+
+                    var pdfBytes = ExportToPdf.GenerateClubPdf(clubData);
+                    return Results.File(pdfBytes, "application/pdf", fileDownloadName: $"club_{id}.pdf");
+                }
                 else
                 {
                     var json = System.Text.Json.JsonSerializer.Serialize(club);
@@ -91,7 +109,7 @@ public static class Endpoints
                 }
             })
             .WithName("ExportClub")
-            .WithDescription("Export údajů spolku v JSON nebo CSV.")
+            .WithDescription("Export údajů spolku v JSON, CSV nebo PDF.")
             .WithSummary("Export club")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<object>().Produces(401);
 

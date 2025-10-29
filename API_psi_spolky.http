@@ -21,8 +21,8 @@ Content-Type: {{json}}
 Accept: {{json}}
 
 {
-  "userName": "Jane",
-  "password": "SecurePass123+-"
+  "userName": "Karel",
+  "password": "ChairmanPass123+-"
 }
 
 ### Get current user
@@ -47,19 +47,19 @@ Content-Type: {{json}}
 Accept: {{json}}
 
 {
-  "name": "Prague Dog Show 2025",
-  "date": "2025-11-20T09:00:00Z",
+  "name": "Prague Dog Show 2026",
+  "date": "2026-11-20T09:00:00Z",
   "place": "Praha - Výstaviště",
   "spolekId": 1,
   "description": "Autumn show"
 }
 
 ### List exhibition results
-GET {{host}}/api/exhibitions/2/results
+GET {{host}}/api/exhibitions/1/results
 Accept: {{json}}
 
 ### Create exhibition result
-POST {{host}}/api/exhibitions/2/results
+POST {{host}}/api/exhibitions/1/results
 Content-Type: {{json}}
 Accept: {{json}}
 
@@ -111,6 +111,53 @@ Accept: {{json}}
 GET {{host}}/api/clubs/1/export?format=csv
 Accept: text/csv
 
+### Export club data (JSON)
+GET {{host}}/api/clubs/1/export?format=json
+Accept: application/json
+
+### Export club data (PDF)
+GET {{host}}/api/clubs/1/export?format=pdf
+Accept: application/pdf
+
+### Get club by id
+GET {{host}}/api/clubs/1
+Accept: {{json}}
+
+### Update club
+PUT {{host}}/api/clubs/1
+Content-Type: {{json}}
+Accept: {{json}}
+
+{
+  "name": "Klub chovatelů psů Praha",
+  "ico": "12345678",
+  "address": "Nová ulice 10, Praha 2",
+  "email": "kontakt@kchp.cz",
+  "phone": "+420 111 222 333"
+}
+
+### Upload/Update club statutes
+POST {{host}}/api/clubs/1/statutes
+Content-Type: {{json}}
+Accept: {{json}}
+
+{
+  "guidelines": "§1 Základní ustanovení\n§2 Členství v klubu\n§3 Organizační struktura",
+  "updatedAt": "2025-10-29T10:00:00Z"
+}
+
+### Get dog by id
+GET {{host}}/api/dogs/1
+Accept: {{json}}
+
+### Get audit logs for statutes changes
+GET {{host}}/api/audit/statutes
+Accept: {{json}}
+
+### Get audit logs for specific club
+GET {{host}}/api/audit/statutes?clubId=1
+Accept: {{json}}
+
 ### Submit club change request
 POST {{host}}/api/clubs/1/change-request
 Content-Type: {{json}}
@@ -126,7 +173,45 @@ Accept: {{json}}
   "reason": "Updating contact information and guidelines"
 }
 
-### Get club change requests
-GET {{host}}/api/clubs/1/change-request
+### Register admin user
+POST {{host}}/register
+Content-Type: {{json}}
 Accept: {{json}}
+
+{
+  "email": "admin@example.com",
+  "password": "AdminPass123+-",
+  "name": "Admin",
+  "surname": "User",
+  "role": "Admin",
+  "phoneNumber": "+420 999 888 777"
+}
+
+### Register chairman user
+POST {{host}}/register
+Content-Type: {{json}}
+Accept: {{json}}
+
+{
+  "email": "chairman@kchp.cz",
+  "password": "ChairmanPass123+-",
+  "name": "Karel",
+  "surname": "Novák",
+  "role": "Chairman",
+  "phoneNumber": "+420 606 123 456"
+}
+
+### Register public user
+POST {{host}}/register
+Content-Type: {{json}}
+Accept: {{json}}
+
+{
+  "email": "public@example.com",
+  "password": "PublicPass123+-",
+  "name": "Petr",
+  "surname": "Svoboda",
+  "role": "Public",
+  "phoneNumber": "+420 777 111 222"
+}
 

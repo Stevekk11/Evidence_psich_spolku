@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Text.Json;
 using API_psi_spolky.DatabaseModels;
 using API_psi_spolky.dtos;
 using Microsoft.EntityFrameworkCore;
@@ -66,7 +67,7 @@ public static class ClubEndpoints
             .WithDescription("Vrátí detail spolku (klubu) dle ID")
             .WithSummary("Get Club By ID")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly")).Produces<Spolek>().Produces(401);
-        app.MapPut("/api/clubs/{id:int}", async (SpolkyDbContext ctx, int id, SpolekUpdateDto dto) =>
+        app.MapPut("/api/clubs/{id:int}", async (SpolkyDbContext ctx, ClaimsPrincipal user, int id, SpolekUpdateDto dto) =>
             {
                 var club = await ctx.Set<Spolek>()
                     .FirstOrDefaultAsync(s => s.Id == id);
@@ -74,13 +75,51 @@ public static class ClubEndpoints
                 if (club is null)
                     return Results.NotFound();
 
+                // Capture original data for audit log
+                var originalJson = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    club.Name,
+                    club.Ico,
+                    club.Address,
+                    club.Email,
+                    club.Phone,
+                    club.Guidelines,
+                    club.GuidelinesUpdatedAt
+                });
+
+                // Update club data
                 club.Name = dto.Name;
                 club.Ico = dto.Ico;
                 club.Address = dto.Address;
                 club.Email = dto.Email;
                 club.Phone = dto.Phone;
 
+                // Capture new data for audit log
+                var newJson = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    dto.Name,
+                    dto.Ico,
+                    dto.Address,
+                    dto.Email,
+                    dto.Phone,
+                    dto.Guidelines
+                });
+
+                // Create audit log entry
+                var auditLog = new AuditLog
+                {
+                    UserId = user.FindFirstValue(ClaimTypes.NameIdentifier)
+                             ?? user.FindFirstValue(ClaimTypes.Name),
+                    SpolekId = id,
+                    Action = "ClubUpdated",
+                    ChangedAt = DateTime.UtcNow,
+                    OriginalData = originalJson,
+                    NewData = newJson
+                };
+
+                ctx.Set<AuditLog>().Add(auditLog);
                 await ctx.SaveChangesAsync();
+
                 return Results.NoContent();
             })
             .WithName("UpdateClub")
@@ -173,22 +212,51 @@ public static class ClubEndpoints
                     ctx.Set<AuditLog>().Add(log);
                     await ctx.SaveChangesAsync();
 
-                    return Results.Created($"/api/audit/statutes?clubId={id}", new { log.Id });
+                    return Results.Created($"/api/audit/statutes?clubId={id}", new { log.Id, log.OriginalData, log.NewData, log.ChangedAt });
                 })
             .WithName("CreateClubChangeRequest")
             .WithDescription("Vytvoří požadavek na změnu údajů spolku do audit logu.")
             .WithSummary("Create club change request")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<AuditLog>().Produces(401);
 
-        app.MapPost("/api/clubs/{id:int}/statutes", async (SpolkyDbContext ctx, int id, StatutesDto dto) =>
+        app.MapPost("/api/clubs/{id:int}/statutes", async (SpolkyDbContext ctx, ClaimsPrincipal user, int id, StatutesDto dto) =>
             {
                 var club = await ctx.Set<Spolek>().FirstOrDefaultAsync(s => s.Id == id);
                 if (club is null) return Results.NotFound("Spolek nebyl nalezen.");
 
+                // Capture original statutes for audit log
+                var originalJson = JsonSerializer.Serialize(new
+                {
+                    club.Guidelines,
+                    club.GuidelinesUpdatedAt
+                });
+
+                // Update statutes
                 club.Guidelines = dto.Guidelines;
                 club.GuidelinesUpdatedAt = dto.UpdatedAt ?? DateTime.UtcNow;
 
+                // Capture new statutes for audit log
+                var newJson = JsonSerializer.Serialize(new
+                {
+                    Guidelines = dto.Guidelines,
+                    GuidelinesUpdatedAt = club.GuidelinesUpdatedAt
+                });
+
+                // Create audit log entry for statutes update (FR7 requirement)
+                var auditLog = new AuditLog
+                {
+                    UserId = user.FindFirstValue(ClaimTypes.NameIdentifier)
+                             ?? user.FindFirstValue(ClaimTypes.Name),
+                    SpolekId = id,
+                    Action = "StatutesUpdated",
+                    ChangedAt = DateTime.UtcNow,
+                    OriginalData = originalJson,
+                    NewData = newJson
+                };
+
+                ctx.Set<AuditLog>().Add(auditLog);
                 await ctx.SaveChangesAsync();
+
                 return Results.NoContent();
             })
             .WithName("UploadClubStatutes")
