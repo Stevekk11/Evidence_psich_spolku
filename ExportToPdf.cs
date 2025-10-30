@@ -4,6 +4,9 @@ using QuestPDF.Infrastructure;
 
 namespace API_psi_spolky;
 
+/// <summary>
+/// Provides methods for exporting data to a PDF format.
+/// </summary>
 public static class ExportToPdf
 {
     public static byte[] GenerateClubPdf(ClubExportData club)

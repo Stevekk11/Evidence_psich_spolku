@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen(c =>
         new()
         {
             Title = "Evidence psích spolků a chovatelů", Version = "v1",
-            Description = "Api pro psí spolky a jejich evidenci včetně výstav",
+            Description = "Api pro psí spolky a jejich evidenci včetně výstav a výsledků výstav.",
             License = new OpenApiLicense
             {
                 Name = "MIT License",
@@ -39,7 +39,7 @@ SelfLog.Enable(Console.Error);
 Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo
     .File("Logs/application_log.log", rollingInterval: RollingInterval.Day).WriteTo.Console().CreateLogger();
 
-// C#
+
 builder.Services.AddDbContext<SpolkyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -52,7 +52,7 @@ builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.Ap
 // Configure the HTTP request pipeline.
 builder.Host.UseSerilog();
 builder.Services.AddAuthorization();
-// C#
+
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

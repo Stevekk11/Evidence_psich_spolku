@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API_psi_spolky.Endpoints;
 
-public record StatutesDto(string? Guidelines, DateTime? UpdatedAt);
 
 /// <summary>
 /// Provides static methods to define and map HTTP endpoints for the application.

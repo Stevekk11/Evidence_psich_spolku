@@ -1,4 +1,5 @@
 ﻿using API_psi_spolky.DatabaseModels;
+using API_psi_spolky.dtos;
 using Microsoft.AspNetCore.Identity;
 
 namespace API_psi_spolky.Endpoints;
@@ -7,13 +8,11 @@ namespace API_psi_spolky.Endpoints;
 /// Represents the data transfer object for registering a new user.
 /// Contains essential user information required for account creation.
 /// </summary>
-public record RegisterUserDto(string Email, string Password, string Name, string Surname, Role Role = Role.Public, string PhoneNumber = "");
 
 /// <summary>
 /// Represents the data transfer object for logging in a user.
 /// Contains user credentials required for authentication.
 /// </summary>
-public record LoginUserDto(string UserName, string Password);
 
 /// <summary>
 /// Provides endpoint mappings for user authentication functionality,
