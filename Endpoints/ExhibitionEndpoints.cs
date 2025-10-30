@@ -79,6 +79,7 @@ public static class ExhibitionEndpoints
                         e.Date,
                         e.Place,
                         e.SpolekId,
+                        e.Spolek.Chairman.UserName,
                         e.Description
                     })
                     .ToListAsync();
@@ -144,7 +145,9 @@ public static class ExhibitionEndpoints
                 {
                     result.Id,
                     result.ExhibitionId,
+                    result.Exhibition.Name,
                     result.DogId,
+                    result.Dog,
                     result.Location,
                     result.Description,
                     result.Score
@@ -166,7 +169,9 @@ public static class ExhibitionEndpoints
                     {
                         r.Id,
                         r.ExhibitionId,
+                        r.Exhibition.Name,
                         r.DogId,
+                        r.Dog,
                         r.Location,
                         r.Description,
                         r.Score
@@ -177,6 +182,6 @@ public static class ExhibitionEndpoints
             }).WithName("GetExhibitionResults")
             .WithDescription("Vrátí seznam výsledků pro konkrétní výstavu.")
             .WithSummary("Get results for an exhibition")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly")).Produces<List<ExhibitionResult>>().Produces(401);
+            .AllowAnonymous().Produces(401);
     }
 }

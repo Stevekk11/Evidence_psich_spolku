@@ -133,7 +133,9 @@ Accept: {{json}}
   "ico": "12345678",
   "address": "Nová ulice 10, Praha 2",
   "email": "kontakt@kchp.cz",
-  "phone": "+420 111 222 333"
+  "phone": "+420 111 222 333",
+  "guidelines": "Updated",
+  "chairmanUserName":"Stevek"
 }
 
 ### Upload/Update club statutes

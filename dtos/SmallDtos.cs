@@ -2,4 +2,4 @@
 
 //public record StatutesDto(string? Guidelines, DateTime? UpdatedAt);
 public record SpolekCreateDto(string Name, string? Ico, string? Address, string? Email, string? Phone, string? Guidelines);
-public record SpolekUpdateDto(string Name, string? Ico, string? Address, string? Email, string? Phone, string? Guidelines);
+public record SpolekUpdateDto(string Name, string? Ico, string? Address, string? Email, string? Phone, string? Guidelines, string? ChairmanUserName);
