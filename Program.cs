@@ -68,25 +68,25 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGet("/", () => { return "Nothing here! Go to /login or /register to start!"; })
-    .WithDescription("The root page - nothing here!").WithName("root").WithSummary("Root");
+    .WithDescription("Zde nic není!").WithName("root").WithSummary("Root");
 app.MapGet("/denied", Results.Unauthorized).Produces(401);
 app.MapGet("/favicon.ico", async context =>
 {
     context.Response.ContentType = "image/x-icon";
     await context.Response.SendFileAsync("wwwroot/favicon.ico");
-}).WithDescription("Returns the favicon").WithName("favicon").WithDisplayName("Favicon");
+}).WithName("favicon").WithDisplayName("Favicon");
 
 app.MapGet("/me", (ClaimsPrincipal user) =>
     {
         var email = user.FindFirstValue(ClaimTypes.Email);
         var name = user.FindFirstValue(ClaimTypes.Name);
-        var surname = user.FindFirstValue(ClaimTypes.Surname);
+        var surname = user.FindFirstValue(ClaimTypes.Surname); //pro budoucí použití, je null
         return Results.Ok(new
         {
-            email, name, surname
+            email, name, //surname
         });
-    }).RequireAuthorization().WithName("Me").WithDescription("Returns the user's email, name and surname")
-    .WithDisplayName("Me").WithSummary("Get current account details");
+    }).RequireAuthorization().WithName("Me").WithDescription("Vrátí informace o aktuálně přihlášném uživateli")
+    .WithDisplayName("Me").WithSummary("Get current account details").WithTags("Account").Produces<User>().Produces(401);
 
 app.MapLoginEndpoints();
 app.MapEndpoints();
@@ -99,7 +99,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = "api";
+});
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 //run the app

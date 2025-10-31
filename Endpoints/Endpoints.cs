@@ -47,6 +47,7 @@ public static class Endpoints
             .WithName("ListStatutesAudit")
             .WithDescription("Vrátí auditní logy změn stanov a požadavků na změny.")
             .WithSummary("List statutes audit")
+            .WithTags("Audit")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<List<AuditLog>>().Produces(401);
 
         app.MapGet("/api/clubs/{id:int}/export", async (SpolkyDbContext ctx, int id, string? format) =>
@@ -110,7 +111,14 @@ public static class Endpoints
             .WithName("ExportClub")
             .WithDescription("Export údajů spolku v JSON, CSV nebo PDF.")
             .WithSummary("Export club")
-            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<object>().Produces(401);
+            .WithTags("Clubs")
+            .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<object>().Produces(401).WithOpenApi(op =>
+            {
+                var p = op.Parameters.FirstOrDefault(x => x.Name == "format");
+                if (p != null)
+                    p.Description = "Output format: json (default), csv, pdf";
+                return op;
+            });;
 
         app.MapPost("/api/dogs/", async (SpolkyDbContext ctx, DogCreateDto dto) =>
             {
@@ -148,6 +156,7 @@ public static class Endpoints
             .WithName("CreateDog")
             .WithDescription("Vytvoří nového psa.")
             .WithSummary("Create dog")
+            .WithTags("Dogs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<Dog>().Produces(401);
 
         app.MapGet("/api/dogs/{id:int}", async (SpolkyDbContext ctx, int id) =>
@@ -172,6 +181,7 @@ public static class Endpoints
             .WithName("GetDogById")
             .WithDescription("Vrátí detail psa dle ID.")
             .WithSummary("Get dog by ID")
+            .WithTags("Dogs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly")).Produces<Dog>().Produces(401);
     }
 }

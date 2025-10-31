@@ -56,7 +56,7 @@ public static class LoginEndpoints
                 return Results.BadRequest(addToRole.Errors);
 
             return Results.Ok("User registered successfully.");
-        }).WithName("Register").WithDescription("Registers a new user.").WithSummary("Register");
+        }).WithName("Register").WithDescription("Zaregistruje uživatele.").WithSummary("Register").WithTags("Account");
 
         app.MapPost("/login", async (SignInManager<User> signInManager, LoginUserDto login) =>
         {
@@ -68,12 +68,12 @@ public static class LoginEndpoints
             }
 
             return Results.Unauthorized();
-        }).WithName("Login").WithDescription("Logs in an existing user.").WithSummary("Login");
+        }).WithName("Login").WithDescription("Přihlásí uživatele.").WithSummary("Login").WithTags("Account");
 
         app.MapPost("/logout", async (SignInManager<User> signInManager) =>
         {
             await signInManager.SignOutAsync();
             return Results.NoContent();
-        }).RequireAuthorization().WithName("Logout").WithDescription("Logs out the current user.").WithSummary("Logout");
+        }).RequireAuthorization().WithName("Logout").WithDescription("Odhlášení uživatele.").WithSummary("Logout").WithTags("Account");
     }
 }

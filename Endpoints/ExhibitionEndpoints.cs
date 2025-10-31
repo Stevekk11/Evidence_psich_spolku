@@ -66,6 +66,7 @@ public static class ExhibitionEndpoints
             .WithName("CreateExhibition")
             .WithDescription("Vytvoří novou výstavu.")
             .WithSummary("Create Exhibition")
+            .WithTags("Exhibitions")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<Exhibition>().Produces(401);
 
         app.MapGet("/api/exhibitions", async (SpolkyDbContext ctx) =>
@@ -88,6 +89,7 @@ public static class ExhibitionEndpoints
             }).WithName("GetExhibitions")
             .WithDescription("Vrátí seznam výstav.")
             .WithSummary("Get all exhibitions")
+            .WithTags("Exhibitions")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly")).Produces<List<Exhibition>>().Produces(401);
 
         app.MapGet("/api/exhibitions/{id:int}", async (SpolkyDbContext ctx, int id) =>
@@ -113,6 +115,7 @@ public static class ExhibitionEndpoints
             .WithName("GetExhibitionById")
             .WithDescription("Vrátí detail výstavy dle ID")
             .WithSummary("Get Exhibition By ID")
+            .WithTags("Exhibitions")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "ReadOnly")).Produces<Exhibition>().Produces(401);
         app.MapPost("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id, ExhibitionResultDto dto, ClaimsPrincipal user) =>
             {
@@ -155,6 +158,7 @@ public static class ExhibitionEndpoints
             })
             .WithName("AddExhibitionResult")
             .WithDescription("Přidá výsledek ke konkrétní výstavě.").WithSummary("Add result to an exhibition.")
+            .WithTags("Exhibitions")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<ExhibitionResult>().Produces(401);
         app.MapGet("/api/exhibitions/{id:int}/results", async (SpolkyDbContext ctx, int id) =>
             {
@@ -182,6 +186,7 @@ public static class ExhibitionEndpoints
             }).WithName("GetExhibitionResults")
             .WithDescription("Vrátí seznam výsledků pro konkrétní výstavu.")
             .WithSummary("Get results for an exhibition")
+            .WithTags("Exhibitions")
             .AllowAnonymous().Produces(401);
     }
 }

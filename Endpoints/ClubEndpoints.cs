@@ -40,6 +40,7 @@ public static class ClubEndpoints
             .WithName("GetClubs")
             .WithDescription("Vrátí seznam všech spolků (klubů).")
             .WithSummary("Get all clubs")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly"))
             .Produces<List<Spolek>>().Produces(401);
         app.MapGet("/api/clubs/{id:int}", async (SpolkyDbContext ctx, int id) =>
@@ -68,6 +69,7 @@ public static class ClubEndpoints
             .WithName("GetClubById")
             .WithDescription("Vrátí detail spolku (klubu) dle ID")
             .WithSummary("Get Club By ID")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly"))
             .Produces<Spolek>().Produces(401);
         app.MapPut("/api/clubs/{id:int}",
@@ -153,6 +155,7 @@ public static class ClubEndpoints
             .WithName("UpdateClub")
             .WithDescription("Aktualizuje spolek (klub) dle ID")
             .WithSummary("Update Club")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman"));
         app.MapPost("/api/clubs/", async (SpolkyDbContext ctx, ClaimsPrincipal user, SpolekCreateDto dto) =>
             {
@@ -198,6 +201,7 @@ public static class ClubEndpoints
             .WithName("CreateClub")
             .WithDescription("Vytvoří nový klub (spolek).")
             .WithSummary("Create club")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<Spolek>().Produces(401);
         app.MapPost("/api/clubs/{id:int}/change-request",
                 async (SpolkyDbContext ctx, ClaimsPrincipal user, int id, SpolekUpdateDto proposed) =>
@@ -249,6 +253,7 @@ public static class ClubEndpoints
             .WithName("CreateClubChangeRequest")
             .WithDescription("Vytvoří požadavek na změnu údajů spolku do audit logu.")
             .WithSummary("Create club change request")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<AuditLog>().Produces(401);
 
         app.MapPost("/api/clubs/{id:int}/statutes",
@@ -295,6 +300,7 @@ public static class ClubEndpoints
             .WithName("UploadClubStatutes")
             .WithDescription("Aktualizuje stanovy (Guidelines) spolku.")
             .WithSummary("Upload club statutes")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman")).Produces<Spolek>().Produces(401);
 
         app.MapGet("/api/clubs/{id:int}/statutes", async (SpolkyDbContext ctx, int id) =>
@@ -316,6 +322,7 @@ public static class ClubEndpoints
             .WithName("GetClubStatutes")
             .WithDescription("Vrátí stanovy (Guidelines) a datum poslední aktualizace.")
             .WithSummary("Get club statutes")
+            .WithTags("Clubs")
             .RequireAuthorization(policy => policy.RequireRole("Admin", "Chairman", "Public", "ReadOnly"))
             .Produces<Spolek>().Produces(401);
     }

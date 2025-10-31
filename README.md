@@ -26,7 +26,7 @@ API používá autorizaci založenou na rolích s následujícími rolemi:
 - ReadOnly (Pouze pro čtení)
 - Public (Veřejný přístup)
 
-## Pro detailní dokumentaci API prosím využijte Swagger/OpenAPI dokumentaci na (adrese serveru)/swagger
+## Pro detailní dokumentaci API prosím využijte Swagger/OpenAPI dokumentaci na (adrese serveru)/api
 
 ## Lokální spuštění
 - Naklonovat repozitář.
@@ -47,7 +47,7 @@ API používá autorizaci založenou na rolích s následujícími rolemi:
     - IIS Express nebo Project (Kestrel).
 4. Vyberte konfiguraci Debug a cílovou platformu Any CPU.
 5. Stiskněte zelenou šipku spustit.
-6. Aplikace poběží na URL z profilu (https://localhost:xxxx). Swagger: /swagger.
+6. Aplikace poběží na URL z profilu (https://localhost:xxxx). Swagger: /api.
 
 ### Spuštění v JetBrains Rider
 1. Otevřete složku řešení v Rideru.
@@ -61,7 +61,7 @@ API používá autorizaci založenou na rolích s následujícími rolemi:
     - dotnet restore
     - dotnet build
     - dotnet run
-3. Otevřete prohlížeč na zobrazené adrese (např. https://localhost:xxxx) a navštivte /swagger pro endpointy.
+3. Otevřete prohlížeč na zobrazené adrese (např. https://localhost:xxxx)
 
 ### Časté problémy
 - Port je obsazen: změňte port v launchSettings.json nebo Run Configuration.
