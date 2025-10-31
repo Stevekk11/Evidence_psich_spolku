@@ -39,7 +39,7 @@ API používá autorizaci založenou na rolích s následujícími rolemi:
 1. Zkopírujte soubor uživatelské konfigurace, pokud je potřeba:
     - appsettings.json → appsettings.Development.json (a upravte connection string, klíče apod.).
     - Podívat se do properties/launchSettings.json
-
+ - dotnet restore
 ### Spuštění ve Visual Studio
 1. Otevřete řešení (.sln).
 2. V Solution Explorer zvolte spouštěcí projekt (Set as Startup Project).
