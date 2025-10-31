@@ -33,6 +33,17 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
+    c.AddServer(new OpenApiServer
+    {
+        Url = "https://localhost:5110/api",
+        Description = "http dev server",
+    });
+    c.AddServer(new OpenApiServer
+    {
+        Url = "https://localhost:7273/api",
+        Description = "https prod server",
+    });
+
 });
 
 SelfLog.Enable(Console.Error);
